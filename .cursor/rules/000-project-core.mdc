@@ -1,0 +1,66 @@
+description: WITH 프로젝트의 PRD(Phase 1) 및 사용자 흐름, 데이터 모델 정의
+globs: */
+alwaysApply: true
+
+Project Context: WITH (Phase 1)
+
+1. 서비스 비전 및 범위 (Phase 1 MVP)
+
+이 프로젝트는 "취미 클래스 탐색 및 예약 데이터 저장"을 검증하는 MVP 단계입니다.
+핵심 목표: 인증(최소화) -> 탐색 -> 상세 -> 예약 -> 내 예약 확인
+
+Phase 1 제한 사항 (엄격 준수):
+
+예약 방식: **즉시 확정(CONFIRMED)**만 존재 (승인/거절 프로세스 없음).
+
+결제: 구현하지 않음 (데이터만 생성).
+
+AI 기능: 단순 텍스트 요약 후 DB 저장 (실시간 추천 로직 없음).
+
+관리자 기능: Phase 1에서는 제외.
+
+2. 사용자 여정 (User Flow)
+
+탐색 (Discovery): - 메인 페이지(/) 진입
+
+지역/카테고리 필터링으로 클래스 조회
+
+상세 (Detail):
+
+클래스 정보, 스튜디오 정보, AI 요약 확인
+
+로그인 필요 모달 (비로그인 시 예약 시도 시)
+
+예약 (Booking):
+
+/class/[id]/book 페이지 이동
+
+회차(TimeSlot) 선택 -> 인원 선택
+
+예약 확정 (Mock DB에 저장)
+
+내 예약 (My Reservations):
+
+/reservations 페이지에서 예약 내역(CONFIRMED) 확인
+
+3. 데이터 모델 (Data Schema)
+
+lib/types.ts 및 lib/mock-data.ts를 기준으로 아래 관계를 유지해야 합니다.
+
+Studios: 클래스 운영 주체 (Location, Description 포함)
+
+Classes: 정적 클래스 정보 (Price, Duration, Category)
+
+Sessions (TimeSlot): 실제 예약 가능한 시간 단위 (Date, StartTime, Capacity, CurrentBookings)
+
+Rule: CurrentBookings + GuestCount <= MaxCapacity 체크 필수.
+
+Reservations: 예약 기록 (Status는 Phase 1에서 무조건 'CONFIRMED')
+
+Users: 최소한의 식별 정보
+
+4. 데이터 정합성 원칙
+
+예약 생성 시, 반드시 해당 TimeSlot의 잔여 좌석을 확인해야 합니다.
+
+모든 날짜 포맷은 YYYY-MM-DD, 시간은 HH:mm을 표준으로 합니다.
