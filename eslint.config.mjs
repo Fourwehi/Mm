@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Project ignores:
+    "tmp v0/**",
+    "tmp-v0/**",
   ]),
 ]);
 

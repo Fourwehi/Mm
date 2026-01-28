@@ -1,0 +1,15 @@
+---
+description: Exclude backup folder tmp v0/tmp-v0 from builds and feature work
+alwaysApply: true
+---
+
+# Ignore backup source folder (`tmp v0/`, `tmp-v0/`)
+
+`tmp v0/` (and `tmp-v0/` if present) is **backup-only source** and is **not part of the product**.
+
+- Do **not** reference, import, or edit code under `tmp v0/` as part of feature development.
+- When diagnosing build/lint/typecheck issues, **exclude `tmp v0/`** from the scope first.
+- Keep build tooling configured so `tmp v0/` is ignored:
+  - TypeScript: excluded via `tsconfig.json`
+  - ESLint: ignored via `eslint.config.mjs`
+
